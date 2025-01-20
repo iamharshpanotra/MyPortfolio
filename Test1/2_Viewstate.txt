@@ -1,0 +1,119 @@
+﻿A. Content:
+
+1. Stateless nature of HTTP protocol
+2. How a webform is processed
+3. What is ViewState
+4. The role of ViewState in ASP.NET
+5. Primary difference between ASP.NET Server controls and HTML controls
+
+Web Applications work on HTTP protocol. HTTP protocol is a stateless protocol, meaning it does not retain state between user requests. 
+Let's understand the stateless nature of the HTTP protocol with an example.
+
+Create a new asp.net web application project. Drag and drop a TextBox and a Button control onto the webform. 
+Change the Text property of the Button control to Click Me.
+
+At this point, double click the button control, which should generate the event handler in the code behind file. Modify the code behind file, so the code in WebForm1 class looks as shown below. 
+1. In the scope of WebForm1 class, we are creating an integer variable ClicksCount which is initialized to ZERO.
+2. On the Page_Load() event handler, we are setting the Text property of TextBox1 to ZERO. We do this initialization, only, when the request is an initial GET request.
+3. In the Button1_Click() event, we are incrementing the value of the ClicksCount by 1, and then assigning the value to the Text property of TextBox1.
+public partial class WebForm1 : System.Web.UI.Page
+{
+    int ClicksCount = 0;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            TextBox1.Text = "0";
+        }
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        ClicksCount = ClicksCount + 1;
+        TextBox1.Text = ClicksCount.ToString();
+    }
+}
+
+With this code in place, run the application, and click the Button. We expect the count to be increased every time we click the button. When you click it the first time, it gets incremented to 1. After that, no matter how many times you click it, the value stays at 1. This is because of the stateless nature of the web applications that work on HTTP protocol.
+
+So what actually happens when you make a GET request for this WebForm1?
+When we compile this project an assembly is generated. Since the name of the project is ViewStateDemo, the name of the assembly will be ViewStateDemo.dll. So when a request is made for WebForm1, The application's assembly(ViewStateDemo.dll) creates an instance (object), of WebForm1, initializes ClicksCount to ZERO, and set's the TextBox1.Text to ZERO. As this is the initial GET request, the Button1_Click() event will not be executed. At this point the web server, generates the HTML to respond to the request, and posts that response back to the browser. It then immediately destroys the instance of the WebForm1.
+
+The browser receives the HTML, and we should now see textbox set to ZERO.
+
+What happens when we click the Button on WebForm1?
+When we click the Button, the WebForm1 gets posted to the server. This is a PostBack request, NOT A GET REQUEST. So, when the webform is posted back, a new instance of this webform is created again, initializing the ClicksCount variable to ZERO. This time, the code that is wrapped between IF(!ISPOSTBACK) block is not executed. Button1_Click() event gets executed as this is a PostBack event. ClicksCount is incremented from 0 to 1. The value is then assigned to the Text Property of TextBox1. Generates the HTML, sends it to client and destroys the webform.
+
+At this Point, we should see the value increased to 1.
+
+What happens when we click the Button on WebForm1 again?
+When you click the button for the second time, the webform gets posted back again. A new instance of WebForm1 is created. ClicksCount initialized to ZERO. In the Button1_Click() event, the value gets incremented to 1 and assigned to TextBox1. HTML gets generated and sends it to client and destroys the webform.
+
+So, no matter how many times you click the Button, the value of the TextBox, will not move beyond 1.
+
+Now, let's see, how to preserve the state between requests using ViewState variables. Re-write the code in WebForm1, as shown below.
+public partial class WebForm1 : System.Web.UI.Page
+{
+    int ClicksCount = 1;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            TextBox1.Text = "0";
+        }
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        if(ViewState["Clicks"] != null)
+        {
+            ClicksCount = (int)ViewState["Clicks"] + 1;
+        }
+        TextBox1.Text = ClicksCount.ToString(); ;
+        ViewState["Clicks"] = ClicksCount;
+    }
+}
+
+
+Click the Button now, and the value gets incremented every time we click. So how is this possible now. It's possible because, we are using the ViewState variable Clicks to preserve the data between requests. The ViewState data, travels with every request and response between the client and the web server.
+
+Now, let's try to achieve the same behaviour, without explicitly storing data in a ViewState variable. Modify the WebForm1 code as shown below.
+public partial class WebForm1 : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            TextBox1.Text = "0";
+        }
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        int ClicksCount = Convert.ToInt32(TextBox1.Text) + 1;
+        TextBox1.Text = ClicksCount.ToString(); 
+    }
+}
+
+Upon clicking the Button, the value gets incremented correctly as expected. This is possible because, TextBox1 is an asp.net server control, that uses viewstate internally, to preserve data across postbacks.
+
+Because Web forms have very short lifetimes, ASP.NET takes special steps to preserve the data entered in the controls on a Web form. Data entered in controls is sent with each request and restored to controls in Page_Init. The data in these controls is then available in the Page_Load(), Button_Click(), and many more events, that occur after Page_Init() event. We will discuss about, all the events in the life cycle of a webform and the order in which they occur in a later video session.
+
+On the other hand the HTML controls, do not retain state across post backs. Only ASP.NET server controls retains state. To prove this
+1. Add a new webform to the web application project
+2. Drag and Drop Input(Text) control from the HTML tab, in the ToolBox
+3. Drag and Drop TextBox control from the Standard tab, in the ToolBox
+4. Finally drag and drop a button
+5. Set the newly added webform as the start page by right clicking on it, in the solution explorer
+6. Run the project, by pressing CTRL + F5
+7. Type "TEST" into both the controls (ASP.NET TextBox and the HTML TextBox), and press the button
+8. You should see that, the value in the ASP.NET TextBox is preserved across postback, but not the value in the standard HTML textbox
+
+An HTML control can be converted in ASP.NET server control, by adding runat="server" attribute in the HTML source as shown below.
+<input id="Text1" runat = "server" type="text" />
+
+Now, if you type TEST and click the button, both controls now retain state across postback.
+
+ViewState data is serialized into base64-encoded strings, and is stored in Hidden input field __ViewState. 
+To view this hidden input field, right click on the browser and select "View Page Source" for google chrome. 
+In internet explorer, right click and select "View Source"
