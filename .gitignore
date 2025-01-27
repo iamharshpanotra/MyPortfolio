@@ -1,2 +1,12 @@
+<<<<<<< HEAD
 *.user 
 .vs/ 
+=======
+<<<<<<< HEAD
+*.user 
+.vs/ 
+=======
+*.user
+.vs/
+>>>>>>> 2c7217472eba22172f2a5d02c70ce60fd3ee05cd
+>>>>>>> 31f45b0fa2f7d18e37620232fc943b12c55e0bc3
