@@ -1,5 +1,0 @@
-﻿The HiddenField control is used to store a value that needs to be persisted across posts to the server, 
-but you don't want the control or it's value visible to the user. 
-For example, when editing and updaing an employee record, we don't want the user to see the EmployeeId. 
-So, we will store the EmployeeId in a HiddenField, so that it can then be used on the server to update 
-the correct employees record.
