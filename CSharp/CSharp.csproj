@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+	<Compile Include="11_SwitchStatement.cs" />
     <Compile Include="13_WhileLoop.cs" />
     <Compile Include="14_DoWhileLoop.cs" />
+	<Compile Include="16_Methods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

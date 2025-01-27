@@ -10,8 +10,10 @@ namespace CSharp
     {
         static void Main(string[] args)
         {
-            //_13_WhileLoop.While();
-            _14_DoWhileLoop.While();
+            _11_SwitchStatement.Switch();
+            _13_WhileLoop.While();
+            //_14_DoWhileLoop.While();
+            //_16_Methods.Method();
         }
     }
 }
