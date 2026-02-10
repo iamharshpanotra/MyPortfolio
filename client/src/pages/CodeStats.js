@@ -16,7 +16,7 @@ const CodeStats = () => {
     const leetcodeUsername = social.leetcode.split('leetcode.com/')[1];
 
     // API base URL
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+    const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
     // Generate year options
     const currentYear = new Date().getFullYear();
@@ -35,7 +35,7 @@ const CodeStats = () => {
     useEffect(() => {
         const fetchGithubStats = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/stats/github/${githubUsername}`);
+                const response = await fetch(`${API}/api/stats/github/${githubUsername}`);
                 const data = await response.json();
 
                 if (data.success) {
@@ -49,13 +49,13 @@ const CodeStats = () => {
         };
 
         fetchGithubStats();
-    }, [githubUsername, API_BASE_URL]);
+    }, [githubUsername]);
 
     // Fetch LeetCode stats
     useEffect(() => {
         const fetchLeetcodeStats = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/stats/leetcode/${leetcodeUsername}`);
+                const response = await fetch(`${API}/api/stats/leetcode/${leetcodeUsername}`);
                 const data = await response.json();
 
                 if (data.success) {
@@ -71,7 +71,7 @@ const CodeStats = () => {
         };
 
         fetchLeetcodeStats();
-    }, [leetcodeUsername, API_BASE_URL]);
+    }, [leetcodeUsername]);
 
     return (
         <div className="code-stats-page">

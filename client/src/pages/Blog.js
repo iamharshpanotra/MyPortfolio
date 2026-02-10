@@ -14,8 +14,8 @@ const Blog = () => {
 
   const fetchBlogs = async () => {
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-      const response = await axios.get(`${apiUrl}/blog/featured?limit=10`);
+      const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const response = await axios.get(`${API}/api/blog/featured?limit=10`);
       setBlogs(response.data);
     } catch (error) {
       console.error('Error fetching blogs:', error);
