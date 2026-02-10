@@ -1,12 +1,38 @@
-<<<<<<< HEAD
-*.user 
-.vs/ 
-=======
-<<<<<<< HEAD
-*.user 
-.vs/ 
-=======
-*.user
-.vs/
->>>>>>> 2c7217472eba22172f2a5d02c70ce60fd3ee05cd
->>>>>>> 31f45b0fa2f7d18e37620232fc943b12c55e0bc3
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production
+/build
+/dist
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Misc
+.cache
