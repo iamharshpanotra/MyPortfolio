@@ -1,0 +1,21 @@
+.page-header { text-align: center; margin-bottom: var(--spacing-3xl); padding: var(--spacing-2xl) 0; }
+.page-header h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); margin-bottom: var(--spacing-md); }
+.section { margin: var(--spacing-3xl) 0; }
+.skills-grid, .projects-grid, .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-xl); }
+.skill-category, .project-card, .blog-card { background-color: var(--backgroundCard); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--spacing-xl); transition: all var(--transition-base); }
+.skill-category:hover, .project-card:hover, .blog-card:hover { border-color: var(--primary); box-shadow: 0 8px 24px var(--shadow); transform: translateY(-4px); }
+.skill-tags, .project-tags { display: flex; flex-wrap: wrap; gap: var(--spacing-sm); margin-top: var(--spacing-md); }
+.skill-tag, .tag { background-color: var(--backgroundAlt); color: var(--textSecondary); padding: 0.375rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.875rem; }
+.timeline { position: relative; padding-left: var(--spacing-xl); }
+.timeline-item { position: relative; padding-bottom: var(--spacing-xl); margin-bottom: var(--spacing-xl); border-left: 2px solid var(--border); }
+.timeline-marker { position: absolute; left: -6px; top: 0; width: 12px; height: 12px; border-radius: var(--radius-full); background-color: var(--primary); }
+.timeline-content { padding-left: var(--spacing-xl); }
+.filter-buttons { display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-xl); flex-wrap: wrap; justify-content: center; }
+.filter-buttons button { padding: 0.5rem 1.5rem; border-radius: var(--radius-full); border: 1px solid var(--border); background-color: var(--backgroundCard); transition: all var(--transition-fast); }
+.filter-buttons button.active, .filter-buttons button:hover { background-color: var(--primary); color: white; border-color: var(--primary); }
+.project-image { height: 200px; background-color: var(--backgroundAlt); border-radius: var(--radius-md); overflow: hidden; margin-bottom: var(--spacing-md); }
+.project-image img { width: 100%; height: 100%; object-fit: cover; }
+.project-links { display: flex; gap: var(--spacing-md); margin-top: var(--spacing-md); }
+.blog-meta { display: flex; gap: var(--spacing-md); color: var(--textMuted); font-size: 0.875rem; margin-bottom: var(--spacing-md); }
+.blog-post { padding: var(--spacing-3xl) 0; }
+.blog-body { line-height: 1.8; font-size: 1.125rem; }

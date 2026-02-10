@@ -1,0 +1,14 @@
+.contact-page { padding: var(--spacing-3xl) 0; }
+.page-header { text-align: center; margin-bottom: var(--spacing-3xl); }
+.page-header h1 { font-size: 3rem; margin-bottom: var(--spacing-md); }
+.contact-content { display: grid; grid-template-columns: 1fr 2fr; gap: var(--spacing-3xl); margin-top: var(--spacing-3xl); }
+.contact-info { display: flex; flex-direction: column; gap: var(--spacing-lg); }
+.info-card { background-color: var(--backgroundCard); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--spacing-xl); }
+.info-icon { font-size: 2rem; color: var(--primary); margin-bottom: var(--spacing-md); }
+.social-links { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.contact-form { display: flex; flex-direction: column; gap: var(--spacing-lg); }
+.form-group { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.form-status { padding: var(--spacing-md); border-radius: var(--radius-md); display: flex; align-items: center; gap: var(--spacing-sm); }
+.form-status.success { background-color: var(--success); color: white; }
+.form-status.error { background-color: var(--error); color: white; }
+@media (max-width: 768px) { .contact-content { grid-template-columns: 1fr; } }
