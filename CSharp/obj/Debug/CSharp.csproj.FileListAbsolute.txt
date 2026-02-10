@@ -1,7 +1,0 @@
-D:\InsideWeb\InsideCSharp\CSharp\bin\Debug\CSharp.exe.config
-D:\InsideWeb\InsideCSharp\CSharp\bin\Debug\CSharp.exe
-D:\InsideWeb\InsideCSharp\CSharp\bin\Debug\CSharp.pdb
-D:\InsideWeb\InsideCSharp\CSharp\obj\Debug\CSharp.csproj.AssemblyReference.cache
-D:\InsideWeb\InsideCSharp\CSharp\obj\Debug\CSharp.csproj.CoreCompileInputs.cache
-D:\InsideWeb\InsideCSharp\CSharp\obj\Debug\CSharp.exe
-D:\InsideWeb\InsideCSharp\CSharp\obj\Debug\CSharp.pdb
