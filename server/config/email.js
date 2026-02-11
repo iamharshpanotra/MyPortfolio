@@ -72,16 +72,27 @@ const sendContactEmail = async (contactData) => {
 
   try {
     console.log('📤 Sending contact email to:', process.env.EMAIL_USER);
+
+    // Verify transporter configuration
+    console.log('🔍 Verifying transporter...');
+    await transporter.verify();
+    console.log('✅ Transporter verified successfully!');
+
+    // Send email
     const info = await transporter.sendMail(mailOptions);
     console.log('✅ Email sent successfully! Message ID:', info.messageId);
+    console.log('📧 Email info:', {
+      accepted: info.accepted,
+      rejected: info.rejected,
+      response: info.response
+    });
     return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error('❌ Email sending error:', error.message);
-    console.error('Error details:', {
-      code: error.code,
-      command: error.command,
-      response: error.response
-    });
+    console.error('❌ Error code:', error.code);
+    console.error('❌ Error command:', error.command);
+    console.error('❌ Error response:', error.response);
+    console.error('❌ Full error:', error);
     throw error;
   }
 };
