@@ -15,6 +15,9 @@ const statsRoutes = require('./routes/stats.routes');
 
 const app = express();
 
+// Trust proxy - Required for Render and other hosting platforms
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(helmet()); // Security headers
 app.use(cors({
@@ -24,10 +27,13 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rate limiting
+// Rate limiting - Configured for production with proxy support
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  // Trust proxy is already set above, so this will work correctly
 });
 app.use('/api/', limiter);
 

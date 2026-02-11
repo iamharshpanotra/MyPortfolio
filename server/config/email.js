@@ -2,7 +2,21 @@ const nodemailer = require('nodemailer');
 
 // Create reusable transporter
 const createTransporter = () => {
-  return nodemailer.createTransport({
+  // Validate email configuration
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.error('❌ Email configuration missing!');
+    console.error('EMAIL_USER:', process.env.EMAIL_USER ? 'Set' : 'NOT SET');
+    console.error('EMAIL_PASS:', process.env.EMAIL_PASS ? 'Set (hidden)' : 'NOT SET');
+    throw new Error('Email configuration is incomplete. Please set EMAIL_USER and EMAIL_PASS environment variables.');
+  }
+
+  console.log('📧 Creating email transporter with:', {
+    service: 'gmail',
+    user: process.env.EMAIL_USER,
+    passLength: process.env.EMAIL_PASS?.length || 0
+  });
+
+  return nodemailer.createTransporter({
     service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER,
@@ -47,11 +61,17 @@ const sendContactEmail = async (contactData) => {
   };
 
   try {
+    console.log('📤 Sending contact email to:', process.env.EMAIL_USER);
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent:', info.messageId);
+    console.log('✅ Email sent successfully! Message ID:', info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error('❌ Email sending error:', error.message);
+    console.error('Error details:', {
+      code: error.code,
+      command: error.command,
+      response: error.response
+    });
     throw error;
   }
 };
@@ -88,10 +108,11 @@ const sendAutoReply = async (recipientEmail, recipientName) => {
   };
 
   try {
+    console.log('📤 Sending auto-reply to:', recipientEmail);
     await transporter.sendMail(mailOptions);
-    console.log('Auto-reply sent to:', recipientEmail);
+    console.log('✅ Auto-reply sent successfully to:', recipientEmail);
   } catch (error) {
-    console.error('Auto-reply sending error:', error);
+    console.error('❌ Auto-reply sending error:', error.message);
     // Don't throw error for auto-reply failure
   }
 };
