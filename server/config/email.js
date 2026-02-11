@@ -1,5 +1,9 @@
 const nodemailer = require('nodemailer');
 
+// Debug: Check if nodemailer is loaded correctly
+console.log('📦 Nodemailer loaded:', typeof nodemailer);
+console.log('📦 createTransport exists:', typeof nodemailer.createTransport);
+
 // Create reusable transporter
 const createTransporter = () => {
   // Validate email configuration
@@ -16,7 +20,13 @@ const createTransporter = () => {
     passLength: process.env.EMAIL_PASS?.length || 0
   });
 
-  return nodemailer.createTransporter({
+  if (typeof nodemailer.createTransport !== 'function') {
+    console.error('❌ nodemailer.createTransport is not a function!');
+    console.error('nodemailer object:', Object.keys(nodemailer));
+    throw new Error('nodemailer.createTransport is not available');
+  }
+
+  return nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER,
