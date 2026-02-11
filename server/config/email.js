@@ -3,6 +3,7 @@ const axios = require('axios');
 
 const EMAIL_SEND_TIMEOUT_MS = Number(process.env.EMAIL_SEND_TIMEOUT_MS || 15000);
 const OWNER_EMAIL = 'iamharshpanotra@gmail.com';
+const INDIA_TIMEZONE = 'Asia/Kolkata';
 
 const buildContactHtml = (contactData) => `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -25,7 +26,7 @@ const buildContactHtml = (contactData) => `
     </div>
 
     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; color: #666;">
-      <p>Received on: ${new Date().toLocaleString()}</p>
+      <p>Received on: ${new Date().toLocaleString('en-IN', { timeZone: INDIA_TIMEZONE })}</p>
     </div>
   </div>
 `;
