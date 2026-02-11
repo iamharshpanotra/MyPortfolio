@@ -30,8 +30,10 @@ exports.submitContact = async (req, res) => {
     try {
       await sendContactEmail({ name, email, subject, message, phone });
 
-      // Send auto-reply to sender
-      await sendAutoReply(email, name);
+      // Auto-reply is optional and disabled by default to avoid confusion.
+      if (process.env.SEND_AUTO_REPLY === 'true') {
+        await sendAutoReply(email, name);
+      }
     } catch (emailError) {
       console.error('Email sending failed:', emailError);
       // Still return success since contact was saved

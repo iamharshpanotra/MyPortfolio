@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const axios = require('axios');
 
 const EMAIL_SEND_TIMEOUT_MS = Number(process.env.EMAIL_SEND_TIMEOUT_MS || 15000);
+const OWNER_EMAIL = 'iamharshpanotra@gmail.com';
 
 const buildContactHtml = (contactData) => `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -47,14 +48,14 @@ const createTransporter = () => {
 };
 
 const sendWithSendGridApi = async ({ to, subject, html, contactEmail, contactName }) => {
-  if (!process.env.EMAIL_USER || !process.env.SENDGRID_API_KEY) {
-    throw new Error('EMAIL_USER and SENDGRID_API_KEY are required for SendGrid delivery.');
+  if (!process.env.SENDGRID_API_KEY) {
+    throw new Error('SENDGRID_API_KEY is required for SendGrid delivery.');
   }
 
   const payload = {
     personalizations: [{ to: [{ email: to }] }],
     from: {
-      email: process.env.EMAIL_USER,
+      email: OWNER_EMAIL,
       name: contactName ? `${contactName} via Portfolio` : 'Portfolio Contact Form'
     },
     subject,
@@ -91,7 +92,7 @@ const sendWithSmtpFallback = async (mailOptions) => {
 };
 
 const sendContactEmail = async (contactData) => {
-  const ownerEmail = process.env.EMAIL_USER || 'iamharshpanotra@gmail.com';
+  const ownerEmail = OWNER_EMAIL;
   const subject = `Portfolio Contact: ${contactData.subject}`;
   const html = buildContactHtml(contactData);
 
@@ -110,7 +111,7 @@ const sendContactEmail = async (contactData) => {
     const info = await sendWithSmtpFallback({
       to: ownerEmail,
       from: `${contactData.name} <${contactData.email}>`,
-      sender: process.env.EMAIL_USER,
+      sender: OWNER_EMAIL,
       replyTo: contactData.email,
       subject,
       html
@@ -162,7 +163,7 @@ const sendAutoReply = async (recipientEmail, recipientName) => {
 
     await sendWithSmtpFallback({
       to: recipientEmail,
-      from: process.env.EMAIL_USER,
+      from: OWNER_EMAIL,
       subject,
       html
     });
