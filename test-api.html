@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>API Response Test</h1>
+    <button onclick="testGitHub()">Test GitHub API</button>
+    <button onclick="testLeetCode()">Test LeetCode API</button>
+    <pre id="output"></pre>
+
+    <script>
+        const API_URL = 'https://myportfolio-smh4.onrender.com';
+        
+        async function testGitHub() {
+            try {
+                const response = await fetch(`${API_URL}/api/stats/github/iamharshpanotra`);
+                const data = await response.json();
+                document.getElementById('output').textContent = 
+                    'GitHub API Response:\n' + JSON.stringify(data, null, 2);
+                console.log('GitHub Stats:', data);
+            } catch (error) {
+                document.getElementById('output').textContent = 'Error: ' + error.message;
+                console.error('Error:', error);
+            }
+        }
+
+        async function testLeetCode() {
+            try {
+                const response = await fetch(`${API_URL}/api/stats/leetcode/iamharshpanotra`);
+                const data = await response.json();
+                document.getElementById('output').textContent = 
+                    'LeetCode API Response:\n' + JSON.stringify(data, null, 2);
+                console.log('LeetCode Stats:', data);
+            } catch (error) {
+                document.getElementById('output').textContent = 'Error: ' + error.message;
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
