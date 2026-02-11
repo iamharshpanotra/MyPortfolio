@@ -98,8 +98,15 @@ const sendContactEmail = async (contactData) => {
       console.log('✅ Transporter verified successfully!');
     }
 
-    // Send email
-    const info = await transporter.sendMail(mailOptions);
+    // Send email with timeout
+    console.log('📨 Attempting to send email...');
+    const sendPromise = transporter.sendMail(mailOptions);
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Email sending timeout after 30 seconds')), 30000)
+    );
+
+    const info = await Promise.race([sendPromise, timeoutPromise]);
+
     console.log('✅ Email sent successfully! Message ID:', info.messageId);
     console.log('📧 Email info:', {
       accepted: info.accepted,
@@ -112,15 +119,32 @@ const sendContactEmail = async (contactData) => {
     console.error('❌ Error code:', error.code);
     console.error('❌ Error command:', error.command);
     console.error('❌ Error response:', error.response);
+    console.error('❌ Error responseCode:', error.responseCode);
 
     // Provide helpful error messages
-    if (error.code === 'ETIMEDOUT') {
+    if (error.code === 'ETIMEDOUT' || error.message.includes('timeout')) {
       console.error('\n⚠️  CONNECTION TIMEOUT ERROR');
-      console.error('This usually means:');
-      console.error('1. Your hosting provider (Render) is blocking SMTP connections to Gmail');
-      console.error('2. Solution: Use SendGrid instead of Gmail');
-      console.error('3. Set SENDGRID_API_KEY environment variable');
-      console.error('4. Get free API key at: https://signup.sendgrid.com/\n');
+      console.error('Possible causes:');
+      console.error('1. Invalid SendGrid API key');
+      console.error('2. Sender email not verified in SendGrid');
+      console.error('3. Network connectivity issues');
+      console.error('4. SendGrid service issues');
+      console.error('\n💡 Solutions:');
+      console.error('- Verify sender email at: https://app.sendgrid.com/settings/sender_auth');
+      console.error('- Check API key at: https://app.sendgrid.com/settings/api_keys');
+      console.error('- Ensure API key has "Mail Send" permissions\n');
+    }
+
+    if (error.code === 'EAUTH' || error.responseCode === 401) {
+      console.error('\n⚠️  AUTHENTICATION ERROR');
+      console.error('Your SendGrid API key is invalid or expired.');
+      console.error('Generate a new API key at: https://app.sendgrid.com/settings/api_keys\n');
+    }
+
+    if (error.responseCode === 403) {
+      console.error('\n⚠️  SENDER NOT VERIFIED');
+      console.error('You must verify your sender email in SendGrid.');
+      console.error('Go to: https://app.sendgrid.com/settings/sender_auth\n');
     }
 
     throw error;
